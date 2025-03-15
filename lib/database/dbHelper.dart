@@ -49,4 +49,20 @@ class DBHelper {
     }
     return allTodo;
   }
+
+  Future<bool> updateTodo(TodoModel updateValue) async {
+    Database db = await getDB();
+
+    int rowEffected = await db.update(TABLE_TODO, updateValue.toMap(),
+        where: "$COLUMN_TODO_ID=?", whereArgs: ['${updateValue.tID!}']);
+    return rowEffected > 0;
+  }
+
+  deleteTodo(int id)async{
+
+    Database db=await getDB();
+    int rowEffected= await db.delete(TABLE_TODO, where: "$COLUMN_TODO_ID=$id");
+    return rowEffected >0;
+
+  }
 }

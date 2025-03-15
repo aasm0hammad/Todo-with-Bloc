@@ -19,9 +19,31 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       }
     });
 
-    on<GetInitialNoteEvent>((event, emit) async {
+    on<GetInitialTodoEvent>((event, emit) async {
       List<TodoModel> allTodo = await dbHelper.fetchInitialTodo();
       emit(TodoState(mTodo: allTodo));
+    });
+    on<UpdateTodoItem>((event, emit) async {
+      bool check = await dbHelper.updateTodo(TodoModel(
+          tTITLE: event.title,
+          tDESC: event.desc,
+          tCREATEDAT: event.createdAt,
+          tID: event.id));
+
+      if (check) {
+        List<TodoModel> all = await dbHelper.fetchInitialTodo();
+        emit(TodoState(mTodo: all));
+      }
+    });
+    on<DeleteTodoItem>((event,emit)async{
+
+     bool check= await dbHelper.deleteTodo(event.id);
+     if(check){
+
+       List<TodoModel> all= await dbHelper.fetchInitialTodo();
+       emit(TodoState(mTodo: all));
+     }
+
     });
   }
 }
