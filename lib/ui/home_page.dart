@@ -69,14 +69,24 @@ class _HomePageState extends State<HomePage> {
                   context.read<TodoBloc>().add(DeleteTodoItem(id: state.mTodo[index].tID!));
                 },
                 onLongPress: (){
-                  context.read<TodoBloc>().add(UpdateTodoItem(title: "title Updated 2", desc: "desc Updated", createdAt: state.mTodo[index].tCREATEDAT, id: state.mTodo[index].tID!));
+                  context.read<TodoBloc>().add(UpdateTodoItem(title: "title Updated 2", desc: "desc Updated", createdAt: state.mTodo[index].tCREATEDAT, id: state.mTodo[index].tID!,isComplete: state.mTodo[index].tIsCompleted));
 
                 },
                 child: ListTile(
                   title: Text(state.mTodo[index].tTITLE),
                   subtitle: Text(state.mTodo[index].tDESC),
                   leading:  Text(state.mTodo[index].tID.toString(),style: TextStyle(fontSize: 21),),
-                  trailing: Text(df.format(time)),
+                  trailing: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+                    children: [
+                      Text(df.format(time)),
+                      IconButton(onPressed: (){
+                        context.read<TodoBloc>().add(IsCompleted(id: state.mTodo[index].tID!, isCompleted: !state.mTodo[index].tIsCompleted));
+
+                      }, icon: Icon(state.mTodo[index].tIsCompleted?Icons.check_circle: Icons.check_circle_outline)),
+                    ],
+                  ),
                 ),
               );
             }):Center(child: Text("Is Empty!"),);

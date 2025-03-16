@@ -12,6 +12,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       bool check = await dbHelper.addTodo(TodoModel(
           tTITLE: event.title,
           tDESC: event.desc,
+          tIsCompleted: false,
           tCREATEDAT: DateTime.now().microsecondsSinceEpoch.toString()));
       if (check) {
         List<TodoModel> allTodo = await dbHelper.fetchInitialTodo();
@@ -28,6 +29,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
           tTITLE: event.title,
           tDESC: event.desc,
           tCREATEDAT: event.createdAt,
+          tIsCompleted: event.isComplete,
           tID: event.id));
 
       if (check) {
@@ -40,6 +42,16 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
      bool check= await dbHelper.deleteTodo(event.id);
      if(check){
 
+       List<TodoModel> all= await dbHelper.fetchInitialTodo();
+       emit(TodoState(mTodo: all));
+     }
+
+    });
+
+    on<IsCompleted>((event, emit)async{
+     bool check= await dbHelper.isCompleted(id: event.id, isComplete: event.isCompleted?1:0);
+
+     if(check){
        List<TodoModel> all= await dbHelper.fetchInitialTodo();
        emit(TodoState(mTodo: all));
      }

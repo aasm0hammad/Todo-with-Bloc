@@ -6,27 +6,31 @@ class TodoModel {
   String tTITLE;
   String tDESC;
   String tCREATEDAT;
+  bool tIsCompleted;
 
   TodoModel({
     this.tID,
     required this.tTITLE,
     required this.tDESC,
     required this.tCREATEDAT,
+    required this.tIsCompleted,
   });
 
-  Map<String, String> toMap() {
+  Map<String, dynamic> toMap() {
     return {
-      DBHelper.getInstance().COLUMN_TODO_TITLE: tTITLE,
-      DBHelper.getInstance().COLUMN_TODO_DESC: tDESC,
-      DBHelper.getInstance().COLUMN_TODO_CREATED_AT: tCREATEDAT
+      DBHelper.COLUMN_TODO_TITLE: tTITLE,
+      DBHelper.COLUMN_TODO_DESC: tDESC,
+      DBHelper.COLUMN_TODO_CREATED_AT: tCREATEDAT,
+      DBHelper.COLUMN_TODO_ISCOMPLETED: tIsCompleted ? 1 : 0,
     };
   }
 
   factory TodoModel.fromMap(Map<String, dynamic> map) {
     return TodoModel(
-        tID: map[DBHelper.getInstance().COLUMN_TODO_ID],
-        tTITLE: map[DBHelper.getInstance().COLUMN_TODO_TITLE],
-        tDESC: map[DBHelper.getInstance().COLUMN_TODO_DESC],
-        tCREATEDAT: map[DBHelper.getInstance().COLUMN_TODO_CREATED_AT]);
+        tID: map[DBHelper.COLUMN_TODO_ID],
+        tTITLE: map[DBHelper.COLUMN_TODO_TITLE],
+        tDESC: map[DBHelper.COLUMN_TODO_DESC],
+        tCREATEDAT: map[DBHelper.COLUMN_TODO_CREATED_AT],
+        tIsCompleted: map[DBHelper.COLUMN_TODO_ISCOMPLETED] == 0 ? false : true);
   }
 }

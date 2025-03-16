@@ -8,13 +8,14 @@ import 'package:todo_bloc/database/todo_model.dart';
 class DBHelper {
   DBHelper._();
 
-  static DBHelper getInstance() => DBHelper._();
+  static  DBHelper getInstance() => DBHelper._();
 
-  String TABLE_TODO = 'TODO';
-  String COLUMN_TODO_ID = 'id';
-  String COLUMN_TODO_TITLE = 'title';
-  String COLUMN_TODO_DESC = 'desc';
-  String COLUMN_TODO_CREATED_AT = 'createdAT';
+  static const String TABLE_TODO = 'TODO';
+  static const String COLUMN_TODO_ID = 'id';
+  static const String COLUMN_TODO_TITLE = 'title';
+  static const String COLUMN_TODO_DESC = 'desc';
+  static const String COLUMN_TODO_CREATED_AT = 'createdAT';
+  static const String COLUMN_TODO_ISCOMPLETED='isCompleted';
 
   Database? _db;
 
@@ -29,7 +30,7 @@ class DBHelper {
     String path = join(appDocDir.path, 'TodoDB.db');
     return await openDatabase(path, version: 1, onCreate: (db, version) {
       db.execute(
-          "create table $TABLE_TODO ( $COLUMN_TODO_ID integer primary key autoincrement, $COLUMN_TODO_TITLE text, $COLUMN_TODO_DESC text, $COLUMN_TODO_CREATED_AT text ) ");
+          "create table $TABLE_TODO ( $COLUMN_TODO_ID integer primary key autoincrement, $COLUMN_TODO_TITLE text, $COLUMN_TODO_DESC text, $COLUMN_TODO_CREATED_AT text,$COLUMN_TODO_ISCOMPLETED integer ) ");
     });
   }
 
@@ -58,11 +59,15 @@ class DBHelper {
     return rowEffected > 0;
   }
 
-  deleteTodo(int id)async{
-
-    Database db=await getDB();
-    int rowEffected= await db.delete(TABLE_TODO, where: "$COLUMN_TODO_ID=$id");
-    return rowEffected >0;
+  deleteTodo(int id)async {
+    Database db = await getDB();
+    int rowEffected = await db.delete(TABLE_TODO, where: "$COLUMN_TODO_ID=$id");
+    return rowEffected > 0;
+  }
+  isCompleted({required int id, required int isComplete})async{
+    Database db= await getDB();
+   int rowEffected=await db.update(TABLE_TODO, {COLUMN_TODO_ISCOMPLETED :isComplete,} as Map<String, Object?>,where: '$COLUMN_TODO_ID=?', whereArgs: ['$id']);
+   return rowEffected>0;
 
   }
 }
