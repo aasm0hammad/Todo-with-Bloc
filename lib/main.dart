@@ -5,7 +5,9 @@ import 'package:todo_bloc/database/dbHelper.dart';
 import 'package:todo_bloc/ui/home_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(BlocProvider(
+    create: (context) => TodoBloc(dbHelper: DBHelper.getInstance()),
+    child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -35,10 +37,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: BlocProvider(
-        create: (context) => TodoBloc(dbHelper: DBHelper.getInstance()),
-        child: HomePage(),
-      ),
+      home: HomePage()
+      ,
     );
   }
 }
