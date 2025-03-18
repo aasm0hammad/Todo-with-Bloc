@@ -12,8 +12,8 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       bool check = await dbHelper.addTodo(TodoModel(
           tTITLE: event.title,
           tDESC: event.desc,
-          tIsCompleted: false,
-          tCREATEDAT: DateTime.now().microsecondsSinceEpoch.toString()));
+          tCREATEDAT: DateTime.now().microsecondsSinceEpoch.toString(),
+        tIsCompleted: false, ));
       if (check) {
         List<TodoModel> allTodo = await dbHelper.fetchInitialTodo();
         emit(TodoState(mTodo: allTodo));
